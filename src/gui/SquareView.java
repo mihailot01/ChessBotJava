@@ -1,13 +1,9 @@
 package gui;
 
-import engine.Piece;
+import engine.pieces.Piece;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 public class SquareView extends JPanel {
@@ -39,8 +35,9 @@ public class SquareView extends JPanel {
         g.drawString(x+","+y,10,10);
 
         if(this.piece != null) {
-            String path = "img/"+(this.piece.getColor()?"b":"w")+this.piece.getType()+".png";
+            String path = "img/"+(this.piece.getColor()?"b":"w")+this.piece.getName()+".png";
             System.out.println(path);
+
             URL imgPath = getClass().getResource(path);
             Image img = new ImageIcon(imgPath).getImage();
             System.out.println(getWidth() + " " + getHeight());
