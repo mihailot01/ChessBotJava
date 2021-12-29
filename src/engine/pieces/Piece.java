@@ -12,6 +12,7 @@ public abstract class Piece {
     boolean color;
     int x;
     int y;
+    int value;
 
     public Piece(Board board, String name, int x, int y, boolean color) {
         this.board = board;
@@ -68,4 +69,13 @@ public abstract class Piece {
     public void setY(int y) {
         this.y = y;
     }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
 }

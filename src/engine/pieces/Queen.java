@@ -12,6 +12,7 @@ public class Queen extends Piece{
     }
     public Queen(Board board, int x, int y, boolean color) {
         super(board,"QUEEN", x, y,  color);
+        setValue(900);
     }
 
     @Override

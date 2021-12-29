@@ -13,6 +13,7 @@ public class Knight extends Piece{
 
     public Knight(Board board, int x, int y, boolean color) {
         super(board,"KNIGHT", x, y,  color);
+        setValue(300);
     }
 
     @Override

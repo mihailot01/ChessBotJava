@@ -13,6 +13,7 @@ public class Rook extends Piece{
     }
     public Rook(Board board, int x, int y, boolean color) {
         super(board,"ROOK", x, y, color);
+        setValue(500);
     }
 
 

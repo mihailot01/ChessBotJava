@@ -13,6 +13,7 @@ public class Pawn extends Piece{
     }
     public Pawn(Board board, int x, int y, boolean color) {
         super(board,"PAWN", x, y, color);
+        setValue(100);
     }
 
     @Override

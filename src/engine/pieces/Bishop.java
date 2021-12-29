@@ -12,11 +12,11 @@ public class Bishop extends Piece {
     }
     public Bishop(Board board, int x, int y, boolean color) {
         super(board,"BISHOP",  x, y, color);
+        setValue(300);
     }
 
     @Override
     public List<Move> getAvailableMoves() {
-
         return null;
     }
 }
