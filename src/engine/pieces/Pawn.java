@@ -17,11 +17,7 @@ public class Pawn extends Piece{
     }
 
     @Override
-    public List<Move> getAvailableMoves() {
-
-        List<Move> availableMoves = new ArrayList<>();
-
-
+    public List<Move> getAvailableMoves(Board b) {
         return null;
     }
 }

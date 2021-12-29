@@ -8,6 +8,7 @@ import java.util.List;
 public class Board {
 
     Piece[][] squares;
+    List<Piece> pieces;
 
     public Board() {
         squares = new Piece[8][8];
@@ -73,8 +74,12 @@ public class Board {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
                 if(squares[i][j] != null)
-                    listOfMoves.addAll(squares[i][j].getAvailableMoves());
+                    listOfMoves.addAll(squares[i][j].getAvailableMoves(this));
         return listOfMoves;
+    }
+
+    public boolean moze(Piece p, int x, int y) {
+        return x >= 0 && y >= 0 && x < 8 && y < 8 && getPiece(x,y).getColor() != p.getColor();
     }
 
 }

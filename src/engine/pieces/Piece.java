@@ -3,10 +3,15 @@ package engine.pieces;
 import engine.Board;
 import engine.Move;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece {
 
+    public int [][] diagonalDir = {{1,1},{1,-1}, {-1,1}, {-1,-1}};
+    public int [][] ortogonalDir = {{1,0},{-1,0}, {0,1}, {0,-1}};
+    public int [][] gDir = {{2,1}, {2,-1}, {-2,1}, {-2,-1}, {1,2}, {1,-2}, {-1,2}, {-1,-2}};
+    public int [][] nextDir = {{1,0},{1,1},{0,1},{0,-1},{-1,-1},{-1,0},{1,-1},{-1,1}};
     Board board;
     String name;
     boolean color;
@@ -28,6 +33,19 @@ public abstract class Piece {
         this.name = name;
     }
 
+    public List<Move> getMovesDir(Board b, int dx, int dy, boolean daleko) {
+        List<Move> list = new ArrayList<>();
+        int x = getX();
+        int y = getY();
+        while(b.moze(this, x+dx, y+dy)) {
+            x += dx;
+            y += dy;
+            list.add(new Move(this, x,y));
+            if(b.getPiece(x,y) != null || !daleko) break;
+        }
+        return list;
+    }
+
     public boolean getColor() {
         return color;
     }
@@ -44,7 +62,7 @@ public abstract class Piece {
         this.name = name;
     }
 
-    abstract public List<Move> getAvailableMoves();
+    abstract public List<Move> getAvailableMoves(Board b);
 
     public Board getBoard() {
         return board;
@@ -77,5 +95,4 @@ public abstract class Piece {
     public void setValue(int value) {
         this.value = value;
     }
-
 }
