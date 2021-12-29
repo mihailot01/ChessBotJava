@@ -4,9 +4,9 @@ import engine.pieces.Piece;
 
 public class Move {
 
-    Piece piece;
-    int endX;
-    int endY;
+    public Piece piece;
+    public int endX;
+    public int endY;
 
     public Move(Piece piece, int endX, int endY) {
         this.piece = piece;

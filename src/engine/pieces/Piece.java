@@ -3,15 +3,21 @@ package engine.pieces;
 import engine.Board;
 import engine.Move;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece {
 
+    public int [][] diagonalDir = {{1,1},{1,-1}, {-1,1}, {-1,-1}};
+    public int [][] ortogonalDir = {{1,0},{-1,0}, {0,1}, {0,-1}};
+    public int [][] gDir = {{2,1}, {2,-1}, {-2,1}, {-2,-1}, {1,2}, {1,-2}, {-1,2}, {-1,-2}};
+    public int [][] nextDir = {{1,0},{1,1},{0,1},{0,-1},{-1,-1},{-1,0},{1,-1},{-1,1}};
     Board board;
     String name;
     boolean color;
     int x;
     int y;
+    int value;
 
     public Piece(Board board, String name, int x, int y, boolean color) {
         this.board = board;
@@ -25,6 +31,38 @@ public abstract class Piece {
         this.board = board;
         this.color = color;
         this.name = name;
+    }
+
+    public Piece(Piece p) {
+        if(p == null) return; // proveri da li ce biti null
+        this.board = p.board;
+        this.name = p.name;
+        this.color = p.color;
+        this.x = p.x;
+        this.y = p.y;
+        this.value = p.value;
+    }
+
+    public List<Move> getMovesDir(Board b, int dx, int dy, boolean daleko) {
+        List<Move> list = new ArrayList<>();
+        int x = getX();
+        int y = getY();
+        while(b.moze(this, x+dx, y+dy)) {
+            x += dx;
+            y += dy;
+            list.add(new Move(this, x,y));
+            if(b.getPiece(x,y) != null || !daleko) break;
+        }
+        return list;
+    }
+
+    public List<Move> filterMoves(List<Move> moves) {
+        List<Move> list = new ArrayList<>();
+        for(Move move: moves) {
+            Board b = new Board(board, move);
+            if(!b.isCheck(getColor())) list.add(move);
+        }
+        return list;
     }
 
     public boolean getColor() {
@@ -43,7 +81,7 @@ public abstract class Piece {
         this.name = name;
     }
 
-    abstract public List<Move> getAvailableMoves();
+    abstract public List<Move> getAvailableMoves(Board b);
 
     public Board getBoard() {
         return board;
@@ -67,5 +105,13 @@ public abstract class Piece {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 }

@@ -1,6 +1,8 @@
 package gui;
 
 import engine.Board;
+import engine.Move;
+import logic.NextMoveAI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +30,13 @@ public class BoardView extends JPanel {
                 rows[i].add(squareViews[i][j]);
             this.add(rows[i]);
         }
+        test();
+    }
+
+    private void test() {
+        NextMoveAI ai = new NextMoveAI();
+        Move m = ai.getNextMove(board);
+        System.out.println(m.piece.getX() + " " + m.piece.getY() + m.piece.getName()+ "lolcina" +m.endX + " " + m.endY);
     }
 
     private void initializeSquareViews(){
