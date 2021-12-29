@@ -16,6 +16,10 @@ public class Pawn extends Piece{
         setValue(100);
     }
 
+    public Pawn(Pawn p){
+        super(p);
+    }
+
     @Override
     public List<Move> getAvailableMoves(Board b) {
         return null;

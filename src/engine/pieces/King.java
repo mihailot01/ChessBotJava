@@ -18,11 +18,16 @@ public class King extends Piece{
         setValue(0);
     }
 
+    public King(King k) {
+        super(k);
+    }
+
     @Override
     public List<Move> getAvailableMoves(Board b) {
         List<Move> list = new ArrayList<>();
         for(int i = 0; i < nextDir.length; i++)
             list.addAll(getMovesDir(b, nextDir[i][0], nextDir[i][1], false));
-        return list;
+        return filterMoves(list);
+
     }
 }

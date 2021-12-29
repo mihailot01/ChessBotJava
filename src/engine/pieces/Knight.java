@@ -17,11 +17,15 @@ public class Knight extends Piece{
         setValue(300);
     }
 
+    public Knight(Knight k){
+        super(k);
+    }
+
     @Override
     public List<Move> getAvailableMoves(Board b) {
         List<Move> list = new ArrayList<>();
         for(int i = 0; i < gDir.length; i++)
             list.addAll(getMovesDir(b, gDir[i][0], gDir[i][1], false));
-        return list;
+        return filterMoves(list);
     }
 }

@@ -17,12 +17,16 @@ public class Rook extends Piece{
         setValue(500);
     }
 
+    public Rook(Rook r){
+        super(r);
+    }
+
 
     @Override
     public List<Move> getAvailableMoves(Board b) {
         List<Move> list = new ArrayList<>();
         for(int i = 0; i < ortogonalDir.length; i++)
             list.addAll(getMovesDir(b, ortogonalDir[i][0], ortogonalDir[i][1], true));
-        return list;
+        return filterMoves(list);
     }
 }

@@ -16,11 +16,15 @@ public class Bishop extends Piece {
         setValue(300);
     }
 
+    public Bishop(Bishop b) {
+        super(b);
+    }
+
     @Override
     public List<Move> getAvailableMoves(Board b) {
         List<Move> list = new ArrayList<>();
         for(int i = 0; i < diagonalDir.length; i++)
             list.addAll(getMovesDir(b, diagonalDir[i][0], diagonalDir[i][1], true));
-        return list;
+        return filterMoves(list);
     }
 }

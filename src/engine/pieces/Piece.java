@@ -33,6 +33,16 @@ public abstract class Piece {
         this.name = name;
     }
 
+    public Piece(Piece p) {
+        if(p == null) return; // proveri da li ce biti null
+        this.board = p.board;
+        this.name = p.name;
+        this.color = p.color;
+        this.x = p.x;
+        this.y = p.y;
+        this.value = p.value;
+    }
+
     public List<Move> getMovesDir(Board b, int dx, int dy, boolean daleko) {
         List<Move> list = new ArrayList<>();
         int x = getX();
@@ -42,6 +52,15 @@ public abstract class Piece {
             y += dy;
             list.add(new Move(this, x,y));
             if(b.getPiece(x,y) != null || !daleko) break;
+        }
+        return list;
+    }
+
+    public List<Move> filterMoves(List<Move> moves) {
+        List<Move> list = new ArrayList<>();
+        for(Move move: moves) {
+            Board b = new Board(board, move);
+            if(!b.isCheck(getColor())) list.add(move);
         }
         return list;
     }

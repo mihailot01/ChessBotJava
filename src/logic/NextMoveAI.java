@@ -26,7 +26,7 @@ public class NextMoveAI {
     private Pair minimax(Board b, int alfa, int beta, boolean color, int depth) {
         Pair res = new Pair(null, 10000);
         if(color) res.val = -10000;
-        List<Move> moves = b.getAllMoves();
+        List<Move> moves = b.getAllMoves(color);
         for(int i = 0; i < moves.size(); i++) {
             Board newBoard = new Board(b, moves.get(i));
             Pair p = minimax(newBoard, alfa, beta, !color, depth-1);
