@@ -22,6 +22,7 @@ public class Pawn extends Piece{
 
     @Override
     public List<Move> getAvailableMoves(Board b) {
-        return null;
+        List<Move> moves = new ArrayList<>();
+        return moves;
     }
 }

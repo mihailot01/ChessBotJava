@@ -51,7 +51,8 @@ public class Board {
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++) {
                 squares[i][j] = PieceCopyFactory.vratiFiguru(b.squares[i][j]);
-                squares[i][j].setBoard(this);
+                if(squares[i][j] != null)
+                    squares[i][j].setBoard(this);
             }
         makeMove(move);
     }
@@ -70,27 +71,29 @@ public class Board {
         int sum = 0;
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
-                sum += getPieceValue(squares[i][j], color);
+                sum += getPieceValue(squares[i][j]);
         return sum;
     }
 
-    private int getPieceValue(Piece p, boolean color) {
+    private int getPieceValue(Piece p) {
         if(p == null) return 0;
-        if(p.getColor() == color) return p.getValue();
+        if(p.getColor()) return p.getValue();
         return -p.getValue();
     }
 
     public List<Move> getAllMoves(boolean color) {
         List<Move> listOfMoves = new ArrayList<>();
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                if(squares[i][j] != null && squares[i][j].getColor() == color)
+        for(int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (squares[i][j] != null && squares[i][j].getColor() == color)
                     listOfMoves.addAll(squares[i][j].getAvailableMoves(this));
+            }
+        }
         return listOfMoves;
     }
 
     public boolean moze(Piece p, int x, int y) {
-        return x >= 0 && y >= 0 && x < 8 && y < 8 && getPiece(x,y).getColor() != p.getColor();
+        return x >= 0 && y >= 0 && x < 8 && y < 8 && (getPiece(x,y) == null || getPiece(x,y).getColor() != p.getColor());
     }
 
     public boolean isCheck(boolean color) { //da li je kralj ove boje ugozen
