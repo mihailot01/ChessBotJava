@@ -2,7 +2,7 @@ package gui;
 
 import engine.Board;
 import engine.Move;
-import logic.NextMoveAI;
+import logic.Bot;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,13 +30,21 @@ public class BoardView extends JPanel {
                 rows[i].add(squareViews[i][j]);
             this.add(rows[i]);
         }
-        test();
+        //test();
+    }
+
+    private void myRepaint(){
+        for(int i = 7; i >= 0; i--)
+            for (int j = 0; j < 8; j++) {
+                this.squareViews[i][j].setPiece(this.board.getPiece(i,j));
+                this.squareViews[i][j].repaint();
+            }
     }
 
     private void test() {
-        NextMoveAI ai = new NextMoveAI();
+        Bot ai = new Bot();
         Move m = ai.getNextMove(board);
-        System.out.println(m.piece.getX() + " " + m.piece.getY() + m.piece.getName()+ "lolcina" +m.endX + " " + m.endY);
+        System.out.println(m.piece.getX() + " " + m.piece.getY() + m.piece.getName()+ "lolcina " +m.endX + " " + m.endY);
     }
 
     private void initializeSquareViews(){
@@ -45,5 +53,9 @@ public class BoardView extends JPanel {
                 squareViews[i][j]=new SquareView(i,j,board.getPiece(i,j));
     }
 
-
+    public void setBoard(Board board) {
+        System.out.println("SET BOARD");
+        this.board = board;
+        this.myRepaint();
+    }
 }

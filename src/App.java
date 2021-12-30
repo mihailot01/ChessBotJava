@@ -9,6 +9,7 @@ public class App{
         MainFrame b = MainFrame.getInstance();
         b.setLocationRelativeTo(null);
         b.setVisible(true);
+        b.getGame().startGame();
     }
 
 

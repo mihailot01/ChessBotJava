@@ -13,4 +13,10 @@ public class Move {
         this.endX = endX;
         this.endY = endY;
     }
+
+    @Override
+    public String toString() {
+        return piece.getName()+" "+piece.getX()+piece.getY()+" "+endX+""+endY;
+
+    }
 }

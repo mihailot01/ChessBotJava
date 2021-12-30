@@ -5,7 +5,7 @@ import engine.Move;
 
 import java.util.List;
 
-public class NextMoveAI {
+public class Bot extends Player{
 
     public class Pair {
         Move move;
@@ -16,15 +16,15 @@ public class NextMoveAI {
         }
     }
 
-    public NextMoveAI() {}
+    public Bot() {}
 
     public Move getNextMove(Board b) {
 
-        List<Move> moves = b.getAllMoves(false);
+        List<Move> moves = b.getAllMoves(this.isColor());
         Pair res = new Pair(null, 10000);
         for(Move move: moves) {
             Board newBoard = new Board(b, move);
-            int p = minimax(newBoard, -10000, 10000, true, 0);
+            int p = minimax(newBoard, -10000, 10000, this.isColor(), 0);
             if(p < res.val) {
                 res.val = p;
                 res.move = move;
@@ -39,20 +39,26 @@ public class NextMoveAI {
         List<Move> moves = b.getAllMoves(color);
         if(depth == 0)
             return b.getRating(color);
-        for(int i = 0; i < moves.size(); i++) {
-            Board newBoard = new Board(b, moves.get(i));
-            int p = minimax(newBoard, alfa, beta, !color, depth-1);
-            if(color) {
-                if(p > res) res = -p;
-                if(res >= beta) return res; //odsecanje
+        for (Move move : moves) {
+            Board newBoard = new Board(b, move);
+            int p = minimax(newBoard, alfa, beta, !color, depth - 1);
+            if (color) {
+                if (p > res) res = -p;
+                if (res >= beta) return res; //odsecanje
                 alfa = Math.max(alfa, res);
-            }
-            else {
-                if(p < res) res = -p;
-                if(res <= alfa) return res; //odsecanje
+            } else {
+                if (p < res) res = -p;
+                if (res <= alfa) return res; //odsecanje
                 beta = Math.min(beta, res);
             }
         }
         return res;
+    }
+
+    @Override
+    void playMove() {
+        Move move = this.getNextMove(this.game.getBoard());
+        if(move!=null)
+            this.game.makeMove(this,move);
     }
 }

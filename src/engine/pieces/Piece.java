@@ -35,7 +35,7 @@ public abstract class Piece {
 
     public Piece(Piece p) {
         if(p == null) return; // proveri da li ce biti null
-        this.board = p.board;
+        this.board = p.board;  // OPASNO!
         this.name = p.name;
         this.color = p.color;
         this.x = p.x;
@@ -57,12 +57,13 @@ public abstract class Piece {
     }
 
     public List<Move> filterMoves(List<Move> moves) {
-        List<Move> list = new ArrayList<>();
+        /*List<Move> list = new ArrayList<>();
         for(Move move: moves) {
             Board b = new Board(board, move);
             if(!b.isCheck(getColor())) list.add(move);
         }
-        return list;
+        return list;*/
+        return moves;
     }
 
     public boolean getColor() {

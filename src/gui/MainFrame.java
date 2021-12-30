@@ -1,6 +1,10 @@
 package gui;
 
 import engine.Board;
+import logic.Bot;
+import logic.Game;
+import logic.Human;
+import logic.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,14 +12,21 @@ import java.awt.*;
 public class MainFrame extends JFrame{
 
     private static MainFrame instance = null;
-    private static BoardView boardView;
+    private BoardView boardView;
+    private Game game;
+
 
     private MainFrame() {
     }
 
     private void initialise(){
 
-        boardView = new BoardView(new Board());
+        game = new Game();
+        game.setPlayers(new Human(), new Bot());
+
+        boardView = new BoardView(game.getBoard());
+        game.setBoardView(boardView);
+
 
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
@@ -37,5 +48,13 @@ public class MainFrame extends JFrame{
 
         }
         return instance;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

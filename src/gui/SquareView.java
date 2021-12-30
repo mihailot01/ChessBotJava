@@ -36,13 +36,21 @@ public class SquareView extends JPanel {
 
         if(this.piece != null) {
             String path = "img/"+(this.piece.getColor()?"b":"w")+this.piece.getName()+".png";
-            System.out.println(path);
+            //System.out.println(path);
 
             URL imgPath = getClass().getResource(path);
             Image img = new ImageIcon(imgPath).getImage();
-            System.out.println(getWidth() + " " + getHeight());
+            //System.out.println(getWidth() + " " + getHeight());
             ((Graphics2D) g).drawImage(img, (int) (getWidth() * 0.1), (int) (getHeight() * 0.1), (int) (getWidth() * 0.8), (int) (getHeight() * 0.8), this);
         }
 
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 }

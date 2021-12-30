@@ -4,6 +4,7 @@ import engine.pieces.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Board {
 
@@ -60,6 +61,8 @@ public class Board {
     public void makeMove(Move move) {
         squares[move.piece.getX()][move.piece.getY()] = null;
         squares[move.endX][move.endY] = move.piece;
+        //move.piece.setX(move.endX);
+        //move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba
     }
 
@@ -97,12 +100,12 @@ public class Board {
     }
 
     public boolean isCheck(boolean color) { //da li je kralj ove boje ugozen
-        List<Move> list = getAllMoves(!color);
+        /*List<Move> list = getAllMoves(!color);
         for(Move move: list) {
             Piece endP = squares[move.endX][move.endY];
-            if(endP != null && endP.getName() == "KING" && endP.getColor() == color)
+            if(endP != null && Objects.equals(endP.getName(), "KING") && endP.getColor() == color)
                 return true;
-        }
+        }*/
         return false;
     }
 
