@@ -10,7 +10,7 @@ public class King extends Piece{
 
 
     public King(Board board, boolean color) {
-        super(board,"KING", color);
+        super(board,"KING", color,0);
     }
 
     public King(Board board, int x, int y, boolean color) {

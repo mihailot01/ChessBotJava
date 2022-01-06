@@ -33,7 +33,7 @@ public class MainFrame extends JFrame{
         int screenHeight = screenSize.height;
         int screenWidth = screenSize.width;
 
-        this.setSize(screenWidth / 2, screenHeight / 2);
+        this.setSize(screenWidth*2 / 3, screenHeight);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("AI Chess Bot");
 

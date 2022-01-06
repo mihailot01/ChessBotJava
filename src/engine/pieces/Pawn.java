@@ -9,7 +9,7 @@ import java.util.List;
 public class Pawn extends Piece{
 
     public Pawn(Board board, boolean color) {
-        super(board,"PAWN", color);
+        super(board,"PAWN", color,100);
     }
     public Pawn(Board board, int x, int y, boolean color) {
         super(board,"PAWN", x, y, color);

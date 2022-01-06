@@ -27,10 +27,11 @@ public abstract class Piece {
         this.y = y;
     }
 
-    public Piece(Board board, String name, boolean color) {
+    public Piece(Board board, String name, boolean color, int value) {
         this.board = board;
         this.color = color;
         this.name = name;
+        this.value = value;
     }
 
     public Piece(Piece p) {

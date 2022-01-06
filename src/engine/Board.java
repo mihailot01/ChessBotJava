@@ -59,10 +59,13 @@ public class Board {
     }
 
     public void makeMove(Move move) {
+        Piece p = squares[move.piece.getX()][move.piece.getY()];
         squares[move.piece.getX()][move.piece.getY()] = null;
-        squares[move.endX][move.endY] = move.piece;
-        //move.piece.setX(move.endX);
-        //move.piece.setY(move.endY);
+        squares[move.endX][move.endY] = p;
+        p.setX(move.endX);
+        p.setY(move.endY);
+//        move.piece.setX(move.endX);
+//        move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba
     }
 
@@ -80,16 +83,19 @@ public class Board {
 
     private int getPieceValue(Piece p) {
         if(p == null) return 0;
-        if(p.getColor()) return p.getValue();
-        return -p.getValue();
+        if(p.getColor()) return -p.getValue();  //crni ima negativan value
+        return p.getValue();
     }
 
     public List<Move> getAllMoves(boolean color) {
         List<Move> listOfMoves = new ArrayList<>();
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (squares[i][j] != null && squares[i][j].getColor() == color)
+                if (squares[i][j] != null && squares[i][j].getColor() == color) {
+//                    if(color)
+//                        System.out.println("Dodajemo " + squares[i][j].getX() + ","+squares[i][j].getY() + " " + squares[i][j].getName());
                     listOfMoves.addAll(squares[i][j].getAvailableMoves(this));
+                }
             }
         }
         return listOfMoves;

@@ -3,8 +3,11 @@ package logic;
 import engine.Board;
 import engine.Move;
 
+import java.util.Random;
+
 public abstract class Player {
 
+    public Random random = new Random();
     protected Game game;
     private boolean onTurn;
     private boolean color;

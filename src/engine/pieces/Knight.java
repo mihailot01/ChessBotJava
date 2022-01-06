@@ -10,7 +10,7 @@ import java.util.List;
 public class Knight extends Piece{
 
     public Knight(Board board, boolean color) {
-        super(board,"KNIGHT", color);
+        super(board,"KNIGHT", color,300);
     }
 
     public Knight(Board board, int x, int y, boolean color) {
@@ -25,12 +25,12 @@ public class Knight extends Piece{
     @Override
     public List<Move> getAvailableMoves(Board b) {
         List<Move> list = new ArrayList<>();
-        int[][] potezi = {{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{2,-1},{-2,1},{-2,-1}};
-        for(int i=0;i<8;i++)
-            if(b.moze(this,this.x+potezi[i][0],this.y+potezi[i][1]))
-                list.add(new Move(this,this.x+potezi[i][0],this.y+potezi[i][1]));
-        /*for(int i = 0; i < gDir.length; i++)
-            list.addAll(getMovesDir(b, gDir[i][0], gDir[i][1], false));*/
+//        int[][] potezi = {{1,2},{1,-2},{-1,2},{-1,-2},{2,1},{2,-1},{-2,1},{-2,-1}};
+//        for(int i=0;i<8;i++)
+//            if(b.moze(this,this.x+potezi[i][0],this.y+potezi[i][1]))
+//                list.add(new Move(this,this.x+potezi[i][0],this.y+potezi[i][1]));
+        for(int i = 0; i < gDir.length; i++)
+            list.addAll(getMovesDir(b, gDir[i][0], gDir[i][1], false));
         return filterMoves(list);
     }
 }
