@@ -18,6 +18,7 @@ public abstract class Piece {
     int x;
     int y;
     int value;
+    boolean moved = false;
 
     public Piece(Board board, String name, int x, int y, boolean color) {
         this.board = board;
@@ -42,13 +43,14 @@ public abstract class Piece {
         this.x = p.x;
         this.y = p.y;
         this.value = p.value;
+        this.moved = p.moved;
     }
 
     public List<Move> getMovesDir(Board b, int dx, int dy, boolean daleko) {
         List<Move> list = new ArrayList<>();
         int x = getX();
         int y = getY();
-        while(b.moze(this, x+dx, y+dy)) {
+        while(b.can(this, x+dx, y+dy)) {
             x += dx;
             y += dy;
             list.add(new Move(this, x,y));
@@ -115,5 +117,13 @@ public abstract class Piece {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public boolean isMoved() {
+        return moved;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
     }
 }

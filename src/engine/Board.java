@@ -2,15 +2,13 @@ package engine;
 
 import engine.pieces.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Board {
 
     Piece[][] squares;
     List<Piece> pieces;
-    Move lastMove;
+    Stack<Move> moves;
 
     public Board() {
         squares = new Piece[8][8];
@@ -39,6 +37,8 @@ public class Board {
                                  new Knight(this,true), new Rook(this,true)
         };
 
+        moves = new Stack<>();
+
         for(int i=0; i<8; i++)
             for(int j=0; j<8; j++)
                 if(squares[i][j]!=null)
@@ -56,19 +56,49 @@ public class Board {
                 if(squares[i][j] != null)
                     squares[i][j].setBoard(this);
             }
+        moves = new Stack<>();
+        moves.addAll(b.moves);
         makeMove(move);
     }
 
     public void makeMove(Move move) {
-        Piece p = squares[move.piece.getX()][move.piece.getY()];
+        Piece p = move.piece;//squares[move.piece.getX()][move.piece.getY()];
+
+        move.capturedPiece = squares[move.endX][move.endY];
+
+        //System.out.println(p);
+        move.startX = p.getX();
+        move.startY = p.getY();
+
         squares[move.piece.getX()][move.piece.getY()] = null;
         squares[move.endX][move.endY] = p;
+
         p.setX(move.endX);
         p.setY(move.endY);
-        lastMove = move;
+
+        moves.add(move);
+
+        move.oldMoved = p.isMoved();
+
+        p.setMoved(true);
+
+
 //        move.piece.setX(move.endX);
 //        move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba
+    }
+
+    public void takeBackMove(Move move){
+        squares[move.startX][move.startY] = move.piece;
+        squares[move.endX][move.endY] = move.capturedPiece;
+        move.piece.setMoved(move.oldMoved);
+        move.piece.setX(move.startX);
+        move.piece.setY(move.startY);
+        if(move.capturedPiece != null) {
+            move.capturedPiece.setX(move.endX);
+            move.capturedPiece.setY(move.endY);
+        }
+        moves.pop();
     }
 
     public Piece getPiece(int x, int y){
@@ -89,22 +119,41 @@ public class Board {
         return p.getValue();
     }
 
-    public List<Move> getAllMoves(boolean color) {
-        List<Move> listOfMoves = new ArrayList<>();
+    public Deque<Move> getAllMoves(boolean color) {
+        Deque<Move> listOfMoves = new ArrayDeque<>();
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (squares[i][j] != null && squares[i][j].getColor() == color) {
 //                    if(color)
 //                        System.out.println("Dodajemo " + squares[i][j].getX() + ","+squares[i][j].getY() + " " + squares[i][j].getName());
-                    listOfMoves.addAll(squares[i][j].getAvailableMoves(this));
+                    List<Move> tmp = squares[i][j].getAvailableMoves(this);
+                    for (Move m : tmp){
+                        if(m.captures)
+                            listOfMoves.addFirst(m);
+                        else
+                            listOfMoves.addLast(m);
+                    }
                 }
             }
         }
+        //Collections.sort(listOfMoves);
         return listOfMoves;
     }
 
-    public boolean moze(Piece p, int x, int y) {
-        return x >= 0 && y >= 0 && x < 8 && y < 8 && (getPiece(x,y) == null || getPiece(x,y).getColor() != p.getColor());
+    public boolean uTabli(int x,int y){
+        return x >= 0 && y >= 0 && x < 8 && y < 8;
+    }
+
+    public boolean can(Piece p, int x, int y) {
+        return uTabli(x,y) && (getPiece(x,y) == null || getPiece(x,y).getColor() != p.getColor());
+    }
+
+    public boolean freeSquare(int x, int y){
+        return uTabli(x,y) && (getPiece(x,y) == null);
+    }
+
+    public boolean enemyPiece(Piece p, int x, int y){
+        return uTabli(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != p.getColor();
     }
 
     public boolean isCheck(boolean color) { //da li je kralj ove boje ugozen
