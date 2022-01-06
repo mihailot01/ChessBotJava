@@ -25,7 +25,7 @@ public class Bot extends Player{
         for(Move move: moves) {
 //            System.out.println(move.piece.getName() + "(" + move.piece.getX() + "," + move.piece.getY() + ")" +"->("+ move.endX +","+ move.endY+")");
             Board newBoard = new Board(b, move);
-            int p = minimax(newBoard, -10000, 10000, this.isColor(), 5);
+            int p = minimax(newBoard, -10000, 10000, !this.isColor(), 5);
             System.out.println(p);
             if(p < res.val) {
                 res.val = p;
@@ -60,7 +60,14 @@ public class Bot extends Player{
     @Override
     void playMove() {
         Move move = this.getNextMove(this.game.getBoard());
-        if(move!=null)
-            this.game.makeMove(this,move);
+//        try {
+//                Thread.sleep(6000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        if (move != null) {
+            this.game.makeMove(this, move);
+            //this.game.changeTurn();
+        }
     }
 }

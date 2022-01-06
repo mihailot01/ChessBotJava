@@ -10,6 +10,7 @@ public class Board {
 
     Piece[][] squares;
     List<Piece> pieces;
+    Move lastMove;
 
     public Board() {
         squares = new Piece[8][8];
@@ -64,6 +65,7 @@ public class Board {
         squares[move.endX][move.endY] = p;
         p.setX(move.endX);
         p.setY(move.endY);
+        lastMove = move;
 //        move.piece.setX(move.endX);
 //        move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba

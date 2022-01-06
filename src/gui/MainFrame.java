@@ -22,9 +22,11 @@ public class MainFrame extends JFrame{
     private void initialise(){
 
         game = new Game();
-        game.setPlayers(new Human(), new Bot());
+        Player human = new Human();
+        game.setPlayers(human, new Bot());
 
         boardView = new BoardView(game.getBoard());
+        boardView.setPlayer(human);
         game.setBoardView(boardView);
 
 
@@ -52,6 +54,10 @@ public class MainFrame extends JFrame{
 
     public Game getGame() {
         return game;
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
     }
 
     public void setGame(Game game) {

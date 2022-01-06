@@ -4,6 +4,10 @@ import engine.Board;
 import engine.Move;
 import gui.BoardView;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class Game {
 
     private Player player1;
@@ -38,19 +42,23 @@ public class Game {
     public void makeMove(Player player, Move move) {
         System.out.println(move.toString());// +" "+player.getClass()+ " "+playerOnMove.getClass());
         if (player == playerOnMove) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             System.out.println("USO");
             this.board.makeMove(move);
             this.boardView.setBoard(board);
-            this.changeTurn();
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            Timer timer = new Timer(100 ,evt -> changeTurn());
+            timer.setRepeats(false);
+            timer.start();
+
+            //this.changeTurn();
         }
     }
 
-    private void changeTurn() {
+    public void changeTurn() {
         if(this.playerOnMove == player1)
             this.setOnMove(player2);
         else
