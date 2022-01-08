@@ -3,7 +3,10 @@ package logic;
 import engine.Board;
 import engine.Move;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.List;
 
 public class Bot extends Player{
 
@@ -36,8 +39,10 @@ public class Bot extends Player{
         int alfa = -10000;
         int beta = 10000;
         for(Move move: moves) {
+            System.out.println("e odigrao sam figuru " + move.piece.getName() + "sa poz " + move.piece.getX() + "," +
+                    move.piece.getY() + " na" + move.endX + "," + move.endY);
             b.makeMove(move);
-            AlfaBeta f = minimax(b, alfa, beta, !this.isColor(), 5);
+            AlfaBeta f = minimax(b, alfa, beta, !this.isColor(), 0);
             b.takeBackMove(move);
             if(f.p < res.val) {
                 res.val = f.p;
@@ -56,7 +61,7 @@ public class Bot extends Player{
         if(!color) res = -10000;
         Deque<Move> moves = b.getAllMoves(color);
         if(depth == 0)
-            return new AlfaBeta(b.getRating(color), alfa, beta);
+            return minimaxJede(b,alfa,beta,color, 0);
         for (Move move : moves) {
             //Board newBoard = new Board(b, move);
             b.makeMove(move);
@@ -72,6 +77,45 @@ public class Bot extends Player{
                 beta = Math.min(beta, res);
             }
         }
+        return new AlfaBeta(res,alfa,beta);
+    }
+
+    private AlfaBeta minimaxJede(Board b, int alfa, int beta, boolean color, int duz) {
+        int res = 10000;
+        if(!color) res = -10000;
+        Deque<Move> moves = b.getAllMoves(color);
+        if(moves.isEmpty() || !moves.getFirst().captures || duz > 10) {
+//            System.out.println("OKKKKK");
+            return new AlfaBeta(b.getRating(color), alfa, beta);
+        }
+        int i = 0;
+        List<Move> niz = new ArrayList<>();
+        for(Move move: moves) {
+            i++;
+            System.out.println("na dubini " + duz + " figura " + move.piece.getName() + "na poz " + move.piece.getX() + "," + move.piece.getY() + " je otisla na" +
+                    move.endX + "," + move.endY);
+            if(!move.captures){
+//                System.out.println(i);
+                break;
+            }
+            niz.add(move);
+        }
+        Collections.sort(niz);
+        for(Move move: niz) {
+            b.makeMove(move);
+            int p = minimaxJede(b, alfa, beta, !color, duz+1).p;
+            b.takeBackMove(move);
+            if (!color) {
+                if (p > res) res = p;
+                if (res >= beta) return new AlfaBeta(res, alfa, beta); //odsecanje
+                alfa = Math.max(alfa, res);
+            } else {
+                if (p < res) res = p;
+                if (res <= alfa) return new AlfaBeta(res,alfa,beta); //odsecanje
+                beta = Math.min(beta, res);
+            }
+        }
+
         return new AlfaBeta(res,alfa,beta);
     }
 

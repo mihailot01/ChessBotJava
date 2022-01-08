@@ -30,10 +30,11 @@ public class Move implements Comparable<Move>{
 
     @Override
     public int compareTo(Move o) {
-        if(this.equals(o) || this.captures == o.captures)
-            return 0;
-        if(this.captures)
-            return 1;
+        if(this.captures && o.captures) {
+            if(this.piece.getValue() - this.capturedPiece.getValue() > o.piece.getValue() - o.capturedPiece.getValue()) return 1;
+            return -1;
+        }
+        if(this.captures) return 1;
         return -1;
     }
 }
