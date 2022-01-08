@@ -65,7 +65,7 @@ public class BoardView extends JPanel {
     private void test() {
         Bot ai = new Bot();
         Move m = ai.getNextMove(board);
-        System.out.println(m.piece.getX() + " " + m.piece.getY() + m.piece.getName()+ "lolcina " +m.endX + " " + m.endY);
+        System.out.println(m.getPiece().getX() + " " + m.getPiece().getY() + m.getPiece().getName()+ "lolcina " + m.getEndX() + " " + m.getEndY());
     }
 
     private void initializeSquareViews(){
@@ -93,7 +93,7 @@ public class BoardView extends JPanel {
             selectedPiece = squareView.getPiece();
             List<Move> availableMoves = new ArrayList<>(squareView.getPiece().getAvailableMoves(board));
             for (Move m : availableMoves)
-                squareViews[m.endX][m.endY].setClicked(2);
+                squareViews[m.getEndX()][m.getEndY()].setClicked(2);
         }
         if(squareView.getClicked()==2){
             MainFrame.getInstance().getGame().makeMove(player,new Move(selectedPiece,squareView.getPosX(),squareView.getPosY()));

@@ -62,26 +62,28 @@ public class Board {
     }
 
     public void makeMove(Move move) {
-        Piece p = move.piece;//squares[move.piece.getX()][move.piece.getY()];
+        Piece p = move.getPiece();//squares[move.piece.getX()][move.piece.getY()];
 
-        move.capturedPiece = squares[move.endX][move.endY];
+        move.setCapturedPiece(squares[move.getEndX()][move.getEndY()]);
 
         //System.out.println(p);
-        move.startX = p.getX();
-        move.startY = p.getY();
+        move.setStartX(p.getX());
+        move.setStartY(p.getY());
 
-        squares[move.piece.getX()][move.piece.getY()] = null;
-        squares[move.endX][move.endY] = p;
+        squares[move.getPiece().getX()][move.getPiece().getY()] = null;
+        squares[move.getEndX()][move.getEndY()] = p;
 
-        p.setX(move.endX);
-        p.setY(move.endY);
+        p.setX(move.getEndX());
+        p.setY(move.getEndY());
 
         moves.add(move);
 
-        move.oldMoved = p.isMoved();
+        move.setOldMoved(p.isMoved());
 
         p.setMoved(true);
 
+        if(move.getCastleMove2()!=null)
+            this.makeMove(move.getCastleMove2());
 
 //        move.piece.setX(move.endX);
 //        move.piece.setY(move.endY);
@@ -89,16 +91,20 @@ public class Board {
     }
 
     public void takeBackMove(Move move){
-        squares[move.startX][move.startY] = move.piece;
-        squares[move.endX][move.endY] = move.capturedPiece;
-        move.piece.setMoved(move.oldMoved);
-        move.piece.setX(move.startX);
-        move.piece.setY(move.startY);
-        if(move.capturedPiece != null) {
-            move.capturedPiece.setX(move.endX);
-            move.capturedPiece.setY(move.endY);
+        squares[move.getStartX()][move.getStartY()] = move.getPiece();
+        squares[move.getEndX()][move.getEndY()] = move.getCapturedPiece();
+
+        move.getPiece().setMoved(move.isOldMoved());
+        move.getPiece().setX(move.getStartX());
+        move.getPiece().setY(move.getStartY());
+        if(move.getCapturedPiece() != null) {
+            move.getCapturedPiece().setX(move.getEndX());
+            move.getCapturedPiece().setY(move.getEndY());
         }
         moves.pop();
+
+        if(move.getCastleMove1()!=null)
+            this.takeBackMove(move.getCastleMove1());
     }
 
     public Piece getPiece(int x, int y){
@@ -128,7 +134,7 @@ public class Board {
 //                        System.out.println("Dodajemo " + squares[i][j].getX() + ","+squares[i][j].getY() + " " + squares[i][j].getName());
                     List<Move> tmp = squares[i][j].getAvailableMoves(this);
                     for (Move m : tmp){
-                        if(m.captures)
+                        if(m.isCaptures())
                             listOfMoves.addFirst(m);
                         else
                             listOfMoves.addLast(m);

@@ -22,11 +22,37 @@ public class King extends Piece{
         super(k);
     }
 
+    private boolean canCastle(Board b, Piece rook){
+        if(this.moved || rook == null || !(rook instanceof Rook) || rook.moved)
+            return false;
+        //int rookY = rook.getY();
+        /*if(rookY<this.y){
+            for(int i=rookY+1;i<this.y;i++)
+                if(!b.freeSquare(this.x,i))
+                    return false;
+            return true;
+        }
+        else {
+            for(int i=rookY-1;i>this.y;i--)
+                if(!b.freeSquare(this.x,i))
+                    return false;
+            return true;
+        }*/
+        return true;
+    }
+
     @Override
     public List<Move> getAvailableMoves(Board b) {
         List<Move> list = new ArrayList<>();
-        for(int i = 0; i < nextDir.length; i++)
-            list.addAll(getMovesDir(b, nextDir[i][0], nextDir[i][1], false));
+        for (int[] ints : nextDir) list.addAll(getMovesDir(b, ints[0], ints[1], false));
+        /*if(!this.isMoved()) {
+            Piece kingsRook = b.getPiece(this.x, this.y + 3);
+            if (canCastle(b, kingsRook)) {
+                Move m = new Move(this, this.x, this.y + 2);
+                m.setCastleMove2(new Move(kingsRook, kingsRook.x, kingsRook.y-2));
+                list.add(m);
+            }
+        }*/
         return filterMoves(list);
 
     }
