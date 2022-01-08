@@ -1,5 +1,6 @@
 package gui;
 
+import engine.Move;
 import engine.pieces.Piece;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class SquareView extends JPanel {
     private Piece piece;
     private BoardView boardView;
     private int clicked;
+    private Move move;
 
     public SquareView(int x, int y, Piece piece, BoardView boardView) {
         this.x = x;
@@ -124,5 +126,13 @@ public class SquareView extends JPanel {
 
     public void setPosY(int y) {
         this.y = y;
+    }
+
+    public Move getMove() {
+        return move;
+    }
+
+    public void setMove(Move move) {
+        this.move = move;
     }
 }

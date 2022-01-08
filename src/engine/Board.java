@@ -63,6 +63,9 @@ public class Board {
     }
 
     public void makeMove(Move move) {
+
+        //System.out.println(move.toString());
+
         Piece p = move.getPiece();//squares[move.piece.getX()][move.piece.getY()];
 
         move.setCapturedPiece(squares[move.getEndX()][move.getEndY()]);
@@ -92,6 +95,7 @@ public class Board {
         //obrisi iz liste figura ako treba
     }
 
+
     public void takeBackMove(Move move){
         squares[move.getStartX()][move.getStartY()] = move.getPiece();
         squares[move.getEndX()][move.getEndY()] = move.getCapturedPiece();
@@ -105,8 +109,8 @@ public class Board {
         }
         moves.pop();
 
-        if(move.getCastleMove1()!=null)
-            this.takeBackMove(move.getCastleMove1());
+        if(move.getCastleMove2()!=null)
+            this.takeBackMove(move.getCastleMove2());
 
         boardValue += getPieceValue(move.getCapturedPiece());
     }
@@ -176,5 +180,12 @@ public class Board {
         }*/
         return false;
     }
+
+    public boolean isAttackedSquare(int x, int y, boolean color){
+        int pawnDir = color ? 1 : -1;
+        //for(int i=-1;i<1;i++)
+        return false;
+    }
+
 
 }

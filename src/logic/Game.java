@@ -42,7 +42,7 @@ public class Game {
     public void makeMove(Player player, Move move) {
         System.out.println(move.toString());// +" "+player.getClass()+ " "+playerOnMove.getClass());
         if (player == playerOnMove) {
-            System.out.println("USO");
+            //System.out.println("USO");
             this.board.makeMove(move);
             this.boardView.setBoard(board);
 //            try {

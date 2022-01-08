@@ -9,7 +9,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class Bot extends Player{
-    public static final int DUBINA = 3;
+    public static final int DUBINA = 2;
 
 
     public static class Pair {
@@ -101,6 +101,7 @@ public class Bot extends Player{
     private AlfaBeta minimaxJede(Board b, int alfa, int beta, boolean color, int duz) {
         int res = 10000;
         if(!color) res = -10000;
+        res = b.getRating();
         Deque<Move> moves = b.getAllMoves(color);
         if(moves.isEmpty() || !moves.getFirst().isCaptures() /*|| duz > 5 || Math.abs(b.getRating()) > 1100*/) {
 //            System.out.println("OKKKKK");

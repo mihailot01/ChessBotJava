@@ -77,14 +77,15 @@ public class BoardView extends JPanel {
     private void resetClicked(){
         selectedPiece = null;
         for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
+            for(int j = 0; j < 8; j++){
                 squareViews[i][j].setClicked(0);
+                squareViews[i][j].setMove(null);
+            }
     }
 
     public void setClicked(SquareView squareView){
         if(squareView.getPiece()!=null && squareView.getPiece().getColor()==player.isColor()) {
-            if(selectedPiece == squareView.getPiece())
-            {
+            if (selectedPiece == squareView.getPiece()) {
                 resetClicked();
                 return;
             }
@@ -92,11 +93,13 @@ public class BoardView extends JPanel {
             squareView.setClicked(1);
             selectedPiece = squareView.getPiece();
             List<Move> availableMoves = new ArrayList<>(squareView.getPiece().getAvailableMoves(board));
-            for (Move m : availableMoves)
+            for (Move m : availableMoves) {
+                squareViews[m.getEndX()][m.getEndY()].setMove(m);
                 squareViews[m.getEndX()][m.getEndY()].setClicked(2);
+            }
         }
-        if(squareView.getClicked()==2){
-            MainFrame.getInstance().getGame().makeMove(player,new Move(selectedPiece,squareView.getPosX(),squareView.getPosY()));
+        if(squareView.getMove()!=null){
+            MainFrame.getInstance().getGame().makeMove(player,squareView.getMove());
             //MainFrame.getInstance().getGame().changeTurn();
             resetClicked();
         }
@@ -104,7 +107,7 @@ public class BoardView extends JPanel {
 
 
     public void setBoard(Board board) {
-        System.out.println("SET BOARD");
+        //System.out.println("SET BOARD");
         this.board = board;
         this.myRepaint();
     }
