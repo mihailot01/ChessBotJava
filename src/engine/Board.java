@@ -9,6 +9,7 @@ public class Board {
     Piece[][] squares;
     List<Piece> pieces;
     Stack<Move> moves;
+    int boardValue = 0;
 
     public Board() {
         squares = new Piece[8][8];
@@ -85,6 +86,7 @@ public class Board {
         if(move.getCastleMove2()!=null)
             this.makeMove(move.getCastleMove2());
 
+        boardValue -= getPieceValue(move.getCapturedPiece());
 //        move.piece.setX(move.endX);
 //        move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba
@@ -105,18 +107,21 @@ public class Board {
 
         if(move.getCastleMove1()!=null)
             this.takeBackMove(move.getCastleMove1());
+
+        boardValue += getPieceValue(move.getCapturedPiece());
     }
 
     public Piece getPiece(int x, int y){
         return squares[x][y];
     }
-
-    public int getRating(boolean color){
+    public int getRating(){
         int sum = 0;
         for(int i = 0; i < 8; i++)
             for(int j = 0; j < 8; j++)
                 sum += getPieceValue(squares[i][j]);
+        if(sum != boardValue) System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAaa");
         return sum;
+//        return boardValue;
     }
 
     private int getPieceValue(Piece p) {

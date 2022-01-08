@@ -9,6 +9,8 @@ import java.util.Deque;
 import java.util.List;
 
 public class Bot extends Player{
+    public static final int DUBINA = 3;
+
 
     public static class Pair {
         Move move;
@@ -29,20 +31,23 @@ public class Bot extends Player{
         }
     }
 
+    Move [] listaStek = new Move[DUBINA+1];
+
     public Bot() {}
 
     public Move getNextMove(Board b) {
         long start = System.currentTimeMillis();
         Deque<Move> moves = b.getAllMoves(this.isColor());
 
-        Pair res = new Pair(null, 10000);
+        Pair res = new Pair(null, 10000000);
         int alfa = -10000;
         int beta = 10000;
         for(Move move: moves) {
-            System.out.println("e odigrao sam figuru " + move.piece.getName() + "sa poz " + move.piece.getX() + "," +
-                    move.piece.getY() + " na" + move.endX + "," + move.endY);
+            System.out.println("e odigrao sam figuru " + move.getPiece().getName() + "sa poz " + move.getPiece().getX() + "," +
+                    move.getPiece().getY() + " na" + move.getEndX() + "," + move.getEndY());
             b.makeMove(move);
-            AlfaBeta f = minimax(b, alfa, beta, !this.isColor(), 0);
+            AlfaBeta f = minimax(b, alfa, beta, !this.isColor(), DUBINA);
+            System.out.println(" MEDJU Ocena pozicije"+f.p);//b.getRating());
             b.takeBackMove(move);
             if(f.p < res.val) {
                 res.val = f.p;
@@ -53,6 +58,14 @@ public class Bot extends Player{
         }
         long end = System.currentTimeMillis();
         System.out.println("Vreme je "+(end-start)/1000.0);
+        System.out.println("Ocena pozicije"+res.val);//b.getRating());
+
+        for(int i = 0; i <= DUBINA; i++) {
+            System.out.println(i + ": ");
+            if(listaStek[i] == null) continue;
+            System.out.println("e odigrao sam figuru " + listaStek[i].getPiece().getName() + "sa poz " + listaStek[i].getStartX() + "," +
+                    listaStek[i].getStartY() + " na" + listaStek[i].getEndX() + "," + listaStek[i].getEndY() + "boja" + listaStek[i].getPiece().getColor());
+        }
         return res.move;
     }
 
@@ -60,20 +73,25 @@ public class Bot extends Player{
         int res = 10000;
         if(!color) res = -10000;
         Deque<Move> moves = b.getAllMoves(color);
-        if(depth == 0)
+        if(depth == 0) {
+//            return new AlfaBeta(b.getRating(), alfa, beta);
             return minimaxJede(b,alfa,beta,color, 0);
+        }
         for (Move move : moves) {
             //Board newBoard = new Board(b, move);
             b.makeMove(move);
+
             int p = minimax(b, alfa, beta, !color, depth - 1).p;
             b.takeBackMove(move);
             if (!color) {
                 if (p > res) res = p;
-                if (res >= beta) return new AlfaBeta(res, alfa, beta); //odsecanje
+//                if (res >= beta) return new AlfaBeta(res, alfa, beta); //odsecanje
+                //if(res > alfa) listaStek[DUBINA-depth] = move;
                 alfa = Math.max(alfa, res);
             } else {
                 if (p < res) res = p;
-                if (res <= alfa) return new AlfaBeta(res,alfa,beta); //odsecanje
+//                if (res <= alfa) return new AlfaBeta(res,alfa,beta); //odsecanje
+                //if(res < beta) listaStek[DUBINA-depth] = move;
                 beta = Math.min(beta, res);
             }
         }
@@ -84,20 +102,15 @@ public class Bot extends Player{
         int res = 10000;
         if(!color) res = -10000;
         Deque<Move> moves = b.getAllMoves(color);
-        if(moves.isEmpty() || !moves.getFirst().captures || duz > 10) {
+        if(moves.isEmpty() || !moves.getFirst().isCaptures() /*|| duz > 5 || Math.abs(b.getRating()) > 1100*/) {
 //            System.out.println("OKKKKK");
-            return new AlfaBeta(b.getRating(color), alfa, beta);
+            return new AlfaBeta(b.getRating(), alfa, beta);
         }
         int i = 0;
         List<Move> niz = new ArrayList<>();
         for(Move move: moves) {
             i++;
-            System.out.println("na dubini " + duz + " figura " + move.piece.getName() + "na poz " + move.piece.getX() + "," + move.piece.getY() + " je otisla na" +
-                    move.endX + "," + move.endY);
-            if(!move.captures){
-//                System.out.println(i);
-                break;
-            }
+            if(!move.isCaptures()) break;
             niz.add(move);
         }
         Collections.sort(niz);
