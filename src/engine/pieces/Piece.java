@@ -8,10 +8,12 @@ import java.util.List;
 
 public abstract class Piece {
 
-    public int [][] diagonalDir = {{1,1},{1,-1}, {-1,1}, {-1,-1}};
-    public int [][] ortogonalDir = {{1,0},{-1,0}, {0,1}, {0,-1}};
-    public int [][] gDir = {{2,1}, {2,-1}, {-2,1}, {-2,-1}, {1,2}, {1,-2}, {-1,2}, {-1,-2}};
-    public int [][] nextDir = {{1,0},{1,1},{0,1},{0,-1},{-1,-1},{-1,0},{1,-1},{-1,1}};
+    int [][] awardPositions = new int[8][8];
+
+    int [][] diagonalDir = {{1,1},{1,-1}, {-1,1}, {-1,-1}};
+    int [][] ortogonalDir = {{1,0},{-1,0}, {0,1}, {0,-1}};
+    int [][] gDir = {{2,1}, {2,-1}, {-2,1}, {-2,-1}, {1,2}, {1,-2}, {-1,2}, {-1,-2}};
+    int [][] nextDir = {{1,0},{1,1},{0,1},{0,-1},{-1,-1},{-1,0},{1,-1},{-1,1}};
     Board board;
     String name;
     boolean color;
@@ -126,4 +128,11 @@ public abstract class Piece {
     public void setMoved(boolean moved) {
         this.moved = moved;
     }
+
+    public int getAwardPosition() {
+        if(!color) return awardPositions[x][y];
+        return -awardPositions[7-x][7-y];
+    }
+
+    public abstract void setAwardPositions();
 }

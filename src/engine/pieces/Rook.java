@@ -29,4 +29,17 @@ public class Rook extends Piece{
             list.addAll(getMovesDir(b, ortogonalDir[i][0], ortogonalDir[i][1], true));
         return filterMoves(list);
     }
+
+    @Override
+    public void setAwardPositions() {
+        awardPositions = new int[][]
+        {{-30,-15,0,0,0,0,-15,-30},
+        {-40,-20,-20,-20,-20,-20,-20,-40},
+        {-40,-20,-20,-20,-20,-20,-20,-40},
+        {-40,-20,-20,-20,-20,-20,-20,-40},
+        {-40,-20,-20,-20,-20,-20,-20,-40},
+        {-40,-20,-20,-20,-20,-20,-20,-40},
+        {-40,-20,-20,-20,-20,-20,-20,-40},
+        {-30, -15, -5, 0, 0, -5, -15, 0, -30}};
+    }
 }

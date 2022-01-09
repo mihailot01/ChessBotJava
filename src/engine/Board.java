@@ -44,8 +44,10 @@ public class Board {
             for(int j=0; j<8; j++)
                 if(squares[i][j]!=null)
                 {
+                    squares[i][j].setAwardPositions();
                     squares[i][j].setX(i);
                     squares[i][j].setY(j);
+                    boardValue += getAwardPosition(squares[i][j]);
                 }
     }
 
@@ -70,6 +72,9 @@ public class Board {
 
         move.setCapturedPiece(squares[move.getEndX()][move.getEndY()]);
 
+        boardValue -= getAwardPosition(p);
+        boardValue -= getAwardPosition(move.getCapturedPiece());
+
         //System.out.println(p);
         move.setStartX(p.getX());
         move.setStartY(p.getY());
@@ -90,6 +95,7 @@ public class Board {
             this.makeMove(move.getCastleMove2());
 
         boardValue -= getPieceValue(move.getCapturedPiece());
+        boardValue += getAwardPosition(move.getPiece());
 //        move.piece.setX(move.endX);
 //        move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba
@@ -99,6 +105,8 @@ public class Board {
     public void takeBackMove(Move move){
         squares[move.getStartX()][move.getStartY()] = move.getPiece();
         squares[move.getEndX()][move.getEndY()] = move.getCapturedPiece();
+
+        boardValue -= getAwardPosition(move.getPiece());
 
         move.getPiece().setMoved(move.isOldMoved());
         move.getPiece().setX(move.getStartX());
@@ -113,19 +121,20 @@ public class Board {
             this.takeBackMove(move.getCastleMove2());
 
         boardValue += getPieceValue(move.getCapturedPiece());
+        boardValue += getAwardPosition(move.getCapturedPiece());
+        boardValue += getAwardPosition(move.getPiece());
     }
 
     public Piece getPiece(int x, int y){
         return squares[x][y];
     }
     public int getRating(){
-        int sum = 0;
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-                sum += getPieceValue(squares[i][j]);
-        if(sum != boardValue) System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAaa");
-        return sum;
-//        return boardValue;
+        return boardValue;
+    }
+
+    public int getAwardPosition(Piece p) {
+        if(p == null) return 0;
+        return p.getAwardPosition();
     }
 
     private int getPieceValue(Piece p) {

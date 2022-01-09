@@ -33,4 +33,17 @@ public class Knight extends Piece{
             list.addAll(getMovesDir(b, gDir[i][0], gDir[i][1], false));
         return filterMoves(list);
     }
+
+    @Override
+    public void setAwardPositions() {
+        awardPositions = new int[][]
+        {{-50, -40, -30, -30, -30, -30, -40, -50},
+        {-30, -25, -20, -20, -20, -25, -25, -30},
+        {-25, -20, -10, -15, -15, -10, -20, -25},
+        {-20, -10, -10, 0, 0, -10, -10, -20},
+        {-20, -10, -10, 0, 0, -10, -10, -20},
+        {-25, -20, -10, -15, -15, -10, -20, -25},
+        {-30, -25, -20, -20, -20, -25, -25, -30},
+        {-50, -40, -30, -30, -30, -30, -40, -50}};
+    }
 }

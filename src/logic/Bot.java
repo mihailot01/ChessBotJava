@@ -9,7 +9,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class Bot extends Player{
-    public static final int DUBINA = 5;
+    public static final int DUBINA = 4;
 
 
     public static class Pair {
@@ -99,7 +99,7 @@ public class Bot extends Player{
             beta = Math.min(beta, res);
         }
         Deque<Move> moves = b.getAllMoves(color);
-        if(moves.isEmpty() || !moves.getFirst().isCaptures() /*|| duz > 5 || Math.abs(b.getRating()) > 1100*/) {
+        if(moves.isEmpty() || !moves.getFirst().isCaptures() || duz > 5 || Math.abs(b.getRating()) > 1100) {
 //            System.out.println("OKKKKK");
             return new AlfaBeta(b.getRating(), alfa, beta);
         }

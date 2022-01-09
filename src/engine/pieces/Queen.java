@@ -29,4 +29,16 @@ public class Queen extends Piece{
             list.addAll(getMovesDir(b, ortogonalDir[i][0], ortogonalDir[i][1], true));
         return filterMoves(list);
     }
+    @Override
+    public void setAwardPositions() {
+        awardPositions = new int[][]
+        {{-30, -20, -20, -20, -20, -20, -20, -30},
+        {-30, -20, -20, -20, -20, -20, -20, -30},
+        {-30, -20, -20, -20, -20, -20, -20, -30},
+        {-30, -20, -20, -20, -20, -20, -20, -30},
+        {-30, -20, -20, -20, -20, -20, -20, -30},
+        {-30, -20, -20, -20, -20, -20, -20, -30},
+        {-20, -10, 0, 0, 0, 0, -10, -20},
+        {-40, -20, -15, -15, -15, -15, -20, -40}};
+    }
 }
