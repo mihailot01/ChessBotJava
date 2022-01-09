@@ -9,7 +9,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class Bot extends Player{
-    public static final int DUBINA = 2;
+    public static final int DUBINA = 6;
 
 
     public static class Pair {
@@ -46,7 +46,7 @@ public class Bot extends Player{
             System.out.println("e odigrao sam figuru " + move.getPiece().getName() + "sa poz " + move.getPiece().getX() + "," +
                     move.getPiece().getY() + " na" + move.getEndX() + "," + move.getEndY());
             b.makeMove(move);
-            AlfaBeta f = minimax(b, alfa, beta, !this.isColor(), DUBINA);
+            AlfaBeta f = minimax(b, alfa, beta, !this.isColor(), DUBINA, move.isCaptures());
             System.out.println(" MEDJU Ocena pozicije"+f.p);//b.getRating());
             b.takeBackMove(move);
             if(f.p < res.val) {
@@ -69,39 +69,43 @@ public class Bot extends Player{
         return res.move;
     }
 
-    private AlfaBeta minimax(Board b, int alfa, int beta, boolean color, int depth) {
+    private AlfaBeta minimax(Board b, int alfa, int beta, boolean color, int depth, boolean jeo) {
         int res = 10000;
         if(!color) res = -10000;
         Deque<Move> moves = b.getAllMoves(color);
         if(depth == 0) {
-//            return new AlfaBeta(b.getRating(), alfa, beta);
-            return minimaxJede(b,alfa,beta,color, 0);
+            if(jeo) return minimaxJede(b,alfa,beta,color, 0, true);
+            return new AlfaBeta(b.getRating(), alfa, beta);
         }
         for (Move move : moves) {
-            //Board newBoard = new Board(b, move);
             b.makeMove(move);
-
-            int p = minimax(b, alfa, beta, !color, depth - 1).p;
+            int p = minimax(b, alfa, beta, !color, depth - 1, move.isCaptures()).p;
             b.takeBackMove(move);
             if (!color) {
                 if (p > res) res = p;
-//                if (res >= beta) return new AlfaBeta(res, alfa, beta); //odsecanje
-                //if(res > alfa) listaStek[DUBINA-depth] = move;
+                if (res >= beta) return new AlfaBeta(res, alfa, beta); //odsecanje
                 alfa = Math.max(alfa, res);
             } else {
                 if (p < res) res = p;
-//                if (res <= alfa) return new AlfaBeta(res,alfa,beta); //odsecanje
-                //if(res < beta) listaStek[DUBINA-depth] = move;
+                if (res <= alfa) return new AlfaBeta(res,alfa,beta); //odsecanje
                 beta = Math.min(beta, res);
             }
         }
         return new AlfaBeta(res,alfa,beta);
     }
 
-    private AlfaBeta minimaxJede(Board b, int alfa, int beta, boolean color, int duz) {
+    private AlfaBeta minimaxJede(Board b, int alfa, int beta, boolean color, int duz, boolean jeo) {
         int res = 10000;
         if(!color) res = -10000;
         res = b.getRating();
+        //opt
+        if (!color) {
+            if (res >= beta) return new AlfaBeta(res, alfa, beta); //odsecanje
+            alfa = Math.max(alfa, res);
+        } else {
+            if (res <= alfa) return new AlfaBeta(res,alfa,beta); //odsecanje
+            beta = Math.min(beta, res);
+        }
         Deque<Move> moves = b.getAllMoves(color);
         if(moves.isEmpty() || !moves.getFirst().isCaptures() /*|| duz > 5 || Math.abs(b.getRating()) > 1100*/) {
 //            System.out.println("OKKKKK");
@@ -109,15 +113,13 @@ public class Bot extends Player{
         }
         int i = 0;
         List<Move> niz = new ArrayList<>();
-        for(Move move: moves) {
-            i++;
-            if(!move.isCaptures()) break;
-            niz.add(move);
-        }
+        niz.addAll(moves);
         Collections.sort(niz);
         for(Move move: niz) {
             b.makeMove(move);
-            int p = minimaxJede(b, alfa, beta, !color, duz+1).p;
+            int p;
+            if(jeo) p = minimaxJede(b, alfa, beta, !color, duz+1, move.isCaptures()).p;
+            else p = b.getRating();
             b.takeBackMove(move);
             if (!color) {
                 if (p > res) res = p;
