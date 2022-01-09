@@ -35,4 +35,17 @@ public class Pawn extends Piece{
             moves.add(new Move(this,this.x+dir,this.y+1));
         return filterMoves(moves);
     }
+
+    @Override
+    public void setAwardPositions() {
+        awardPositions = new int[][]
+        {{-20, -20, -20, -20, -20, -20, -20, -20},
+        {-20, -25, -32, -50, -50, -32, -25, -20},
+        {-15, -25, -20, -30, -30, -20, -25, -15},
+        {-35, -35, -30, -30, -30, -30, -35, -35},
+        {-30, -25, -10, 5, 5, -10, -25, -30},
+        {-25, -20, -15, 0, 0, -15, -20, -25},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0}};
+    }
 }
