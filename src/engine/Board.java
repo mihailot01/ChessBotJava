@@ -10,6 +10,8 @@ public class Board {
     List<Piece> pieces;
     Stack<Move> moves;
     int boardValue = 0;
+    Piece whiteKing;
+    Piece blackKing;
 
     public Board() {
         squares = new Piece[8][8];
@@ -47,6 +49,9 @@ public class Board {
                     squares[i][j].setX(i);
                     squares[i][j].setY(j);
                 }
+
+        whiteKing = squares[0][4];
+        blackKing = squares[7][4];
     }
 
     public Board(Board b, Move move) {
@@ -170,20 +175,96 @@ public class Board {
     public boolean enemyPiece(Piece p, int x, int y){
         return uTabli(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != p.getColor();
     }
+    public boolean enemyPiece(boolean c, int x, int y){
+        return uTabli(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != c;
+    }
 
-    public boolean isCheck(boolean color) { //da li je kralj ove boje ugozen
-        /*List<Move> list = getAllMoves(!color);
-        for(Move move: list) {
-            Piece endP = squares[move.endX][move.endY];
-            if(endP != null && Objects.equals(endP.getName(), "KING") && endP.getColor() == color)
-                return true;
-        }*/
-        return false;
+    public boolean isCheck(boolean color) {
+        Piece king = whiteKing;
+        if(color) king = blackKing;
+        return isAttackedSquare(king.getX(), king.getY(), king.getColor());
     }
 
     public boolean isAttackedSquare(int x, int y, boolean color){
         int pawnDir = color ? 1 : -1;
-        //for(int i=-1;i<1;i++)
+
+        //KING ATTACKS
+        for(int i=-1;i<=1;i++)
+            for(int j=-1;j<=1;j++)
+                if(uTabli(x+i,y+j) && getPiece(x+i,y+j)!=null && getPiece(x+i, y+j) instanceof King && getPiece(x+i,y+j).getColor()!=color)
+                    return true;
+
+        //PAWN
+        int xp = x - pawnDir;
+        if(enemyPiece(color,xp,y+1) && getPiece(xp,y+1) instanceof Pawn)
+            return true;
+        if(enemyPiece(color,xp,y-1) && getPiece(xp,y-1) instanceof Pawn)
+            return true;
+
+        //KNIGHT
+        int[][]  dir= {{2,1}, {2,-1}, {-2,1}, {-2,-1}, {1,2}, {1,-2}, {-1,2}, {-1,-2}};
+        for(int i=0;i<8;i++)
+            if(enemyPiece(color,x+dir[i][0],y+dir[i][1]) && (getPiece(x+dir[i][0],y+dir[i][1]) instanceof Knight)) {
+                //System.out.println("SAH KONJEM");
+                return true;
+            }
+        //ROOK
+        for(int j=-1;j<=1;j+=2)
+            for(int i=1;i<8;i++){
+                if(!uTabli(x,y+i*j))
+                    break;
+
+                Piece p = getPiece(x,y+i*j);
+
+                if(p != null){
+                    if((p instanceof Rook || p instanceof Queen) && (p.getColor()!=color))
+                        return true;
+                    break;
+                }
+            }
+
+        for(int j=-1;j<=1;j+=2)
+            for(int i=1;i<8;i++){
+                if(!uTabli(x+i*j,y))
+                    break;
+
+                Piece p = getPiece(x+i*j,y);
+
+                if(p != null){
+                    if((p instanceof Rook || p instanceof Queen) && (p.getColor()!=color))
+                        return true;
+                    break;
+                }
+            }
+
+        //BISHOP
+        for(int j=-1;j<=1;j+=2) {
+            for (int i = 1; i < 8; i++) {
+                if (!uTabli(x + i * j , y+ i * j))
+                    break;
+
+                Piece p = getPiece(x + i * j, y + i * j);
+
+                if (p != null) {
+                    if ((p instanceof Bishop || p instanceof Queen) && (p.getColor() != color))
+                        return true;
+                    break;
+                }
+            }
+            for (int i = 1; i < 8; i++) {
+
+                if (!uTabli(x + i * j, y - i * j))
+                    break;
+
+                Piece p = getPiece(x + i * j, y - i * j);
+
+                if (p != null) {
+                    if ((p instanceof Bishop || p instanceof Queen) && (p.getColor() != color))
+                        return true;
+                    break;
+                }
+            }
+        }
         return false;
     }
 

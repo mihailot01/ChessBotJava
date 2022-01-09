@@ -9,7 +9,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class Bot extends Player{
-    public static final int DUBINA = 5;
+    public static final int DUBINA = 0;
 
 
     public static class Pair {

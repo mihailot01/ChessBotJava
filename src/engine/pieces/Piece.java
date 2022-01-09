@@ -60,13 +60,15 @@ public abstract class Piece {
     }
 
     public List<Move> filterMoves(List<Move> moves) {
-        /*List<Move> list = new ArrayList<>();
+        List<Move> list = new ArrayList<>();
         for(Move move: moves) {
-            Board b = new Board(board, move);
-            if(!b.isCheck(getColor())) list.add(move);
+            Board b = move.getPiece().getBoard();
+            b.makeMove(move);
+            if(!b.isCheck(move.getPiece().getColor()))
+                list.add(move);
+            b.takeBackMove(move);
         }
-        return list;*/
-        return moves;
+        return list;
     }
 
     public boolean getColor() {

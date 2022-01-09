@@ -28,13 +28,13 @@ public class King extends Piece{
         int rookY = rook.getY();
         if(rookY<this.y){
             for(int i=rookY+1;i<this.y;i++)
-                if(!b.freeSquare(this.x,i))
+                if(!b.freeSquare(this.x,i) || (i!=rookY+1 && b.isAttackedSquare(this.x,i,color)))
                     return false;
             return true;
         }
         else {
             for(int i=rookY-1;i>this.y;i--)
-                if(!b.freeSquare(this.x,i))
+                if(!b.freeSquare(this.x,i) || b.isAttackedSquare(this.x,i,color))
                     return false;
             return true;
         }
