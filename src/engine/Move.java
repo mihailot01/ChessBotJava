@@ -1,5 +1,6 @@
 package engine;
 
+import engine.pieces.Pawn;
 import engine.pieces.Piece;
 
 public class Move implements Comparable<Move>{
@@ -18,6 +19,8 @@ public class Move implements Comparable<Move>{
     private Move castleMove1;
     private Move castleMove2;
 
+    private boolean promotion = false;
+
 
     public Move(Piece piece, int endX, int endY) {
         this.piece = piece;
@@ -29,6 +32,10 @@ public class Move implements Comparable<Move>{
         this.capturedPiece = piece.getBoard().getPiece(endX,endY);
         this.castleMove1 = null;
         this.castleMove2 = null;
+
+//        if((piece instanceof Pawn ) && (endX == 7 || endX==0))
+//            promotion = true;
+
     }
 
     @Override
@@ -127,5 +134,13 @@ public class Move implements Comparable<Move>{
     public void setCastleMove2(Move castleMove2) {
         this.castleMove2 = castleMove2;
         castleMove2.setCastleMove1(this);
+    }
+
+    public boolean isPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(boolean promotion) {
+        this.promotion = promotion;
     }
 }

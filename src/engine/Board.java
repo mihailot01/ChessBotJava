@@ -6,12 +6,12 @@ import java.util.*;
 
 public class Board {
 
-    Piece[][] squares;
-    List<Piece> pieces;
-    Stack<Move> moves;
-    int boardValue = 0;
-    Piece whiteKing;
-    Piece blackKing;
+    private Piece[][] squares;
+    private List<Piece> pieces;
+    private Stack<Move> moves;
+    private int boardValue = 0;
+    private Piece whiteKing;
+    private Piece blackKing;
 
     public Board() {
         squares = new Piece[8][8];
@@ -99,13 +99,17 @@ public class Board {
         if(move.getCastleMove2()!=null)
             this.makeMove(move.getCastleMove2());
 
+        if(move.isPromotion()) {
+            boardValue-=getPieceValue(move.getPiece());
+            move.setPiece(new Queen(move.getPiece().getBoard(), move.getEndX(), move.getEndY(), move.getPiece().getColor()));
+            boardValue+=getPieceValue(move.getPiece());
+        }
         boardValue -= getPieceValue(move.getCapturedPiece());
         boardValue += getAwardPosition(move.getPiece());
 //        move.piece.setX(move.endX);
 //        move.piece.setY(move.endY);
         //obrisi iz liste figura ako treba
     }
-
 
     public void takeBackMove(Move move){
         squares[move.getStartX()][move.getStartY()] = move.getPiece();
@@ -125,6 +129,12 @@ public class Board {
         if(move.getCastleMove2()!=null)
             this.takeBackMove(move.getCastleMove2());
 
+        if(move.isPromotion()){
+            boardValue-=getPieceValue(move.getPiece());
+            move.setPiece(new Pawn(move.getPiece().getBoard(), move.getStartX(), move.getStartY(), move.getPiece().getColor()));
+            boardValue+=getPieceValue(move.getPiece());
+        }
+
         boardValue += getPieceValue(move.getCapturedPiece());
         boardValue += getAwardPosition(move.getCapturedPiece());
         boardValue += getAwardPosition(move.getPiece());
@@ -133,6 +143,7 @@ public class Board {
     public Piece getPiece(int x, int y){
         return squares[x][y];
     }
+
     public int getRating(){
         return boardValue;
     }
@@ -169,23 +180,24 @@ public class Board {
         return listOfMoves;
     }
 
-    public boolean uTabli(int x,int y){
+    public boolean insideTable(int x, int y){
         return x >= 0 && y >= 0 && x < 8 && y < 8;
     }
 
     public boolean can(Piece p, int x, int y) {
-        return uTabli(x,y) && (getPiece(x,y) == null || getPiece(x,y).getColor() != p.getColor());
+        return insideTable(x,y) && (getPiece(x,y) == null || getPiece(x,y).getColor() != p.getColor());
     }
 
     public boolean freeSquare(int x, int y){
-        return uTabli(x,y) && (getPiece(x,y) == null);
+        return insideTable(x,y) && (getPiece(x,y) == null);
     }
 
     public boolean enemyPiece(Piece p, int x, int y){
-        return uTabli(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != p.getColor();
+        return insideTable(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != p.getColor();
     }
+
     public boolean enemyPiece(boolean c, int x, int y){
-        return uTabli(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != c;
+        return insideTable(x,y) && getPiece(x,y)!= null && getPiece(x,y).getColor() != c;
     }
 
     public boolean isCheck(boolean color) {
@@ -200,7 +212,7 @@ public class Board {
         //KING ATTACKS
         for(int i=-1;i<=1;i++)
             for(int j=-1;j<=1;j++)
-                if(uTabli(x+i,y+j) && getPiece(x+i,y+j)!=null && getPiece(x+i, y+j) instanceof King && getPiece(x+i,y+j).getColor()!=color)
+                if(insideTable(x+i,y+j) && getPiece(x+i,y+j)!=null && getPiece(x+i, y+j) instanceof King && getPiece(x+i,y+j).getColor()!=color)
                     return true;
 
         //PAWN
@@ -220,7 +232,7 @@ public class Board {
         //ROOK
         for(int j=-1;j<=1;j+=2)
             for(int i=1;i<8;i++){
-                if(!uTabli(x,y+i*j))
+                if(!insideTable(x,y+i*j))
                     break;
 
                 Piece p = getPiece(x,y+i*j);
@@ -234,7 +246,7 @@ public class Board {
 
         for(int j=-1;j<=1;j+=2)
             for(int i=1;i<8;i++){
-                if(!uTabli(x+i*j,y))
+                if(!insideTable(x+i*j,y))
                     break;
 
                 Piece p = getPiece(x+i*j,y);
@@ -249,7 +261,7 @@ public class Board {
         //BISHOP
         for(int j=-1;j<=1;j+=2) {
             for (int i = 1; i < 8; i++) {
-                if (!uTabli(x + i * j , y+ i * j))
+                if (!insideTable(x + i * j , y+ i * j))
                     break;
 
                 Piece p = getPiece(x + i * j, y + i * j);
@@ -262,7 +274,7 @@ public class Board {
             }
             for (int i = 1; i < 8; i++) {
 
-                if (!uTabli(x + i * j, y - i * j))
+                if (!insideTable(x + i * j, y - i * j))
                     break;
 
                 Piece p = getPiece(x + i * j, y - i * j);

@@ -40,21 +40,14 @@ public class Game {
     }
 
     public void makeMove(Player player, Move move) {
-        System.out.println(move.toString());// +" "+player.getClass()+ " "+playerOnMove.getClass());
+        System.out.println(move.toString());
         if (player == playerOnMove) {
-            //System.out.println("USO");
             this.board.makeMove(move);
             this.boardView.setBoard(board);
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+
             Timer timer = new Timer(100 ,evt -> changeTurn());
             timer.setRepeats(false);
             timer.start();
-
-            //this.changeTurn();
         }
     }
 

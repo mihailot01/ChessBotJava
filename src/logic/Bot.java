@@ -2,14 +2,16 @@ package logic;
 
 import engine.Board;
 import engine.Move;
+import gui.MainFrame;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 
 public class Bot extends Player{
-    public static final int DUBINA = 4;
+    public static final int DUBINA = 3;
 
 
     public static class Pair {
@@ -67,6 +69,8 @@ public class Bot extends Player{
         int res = 10000;
         if(!color) res = -10000;
         Deque<Move> moves = b.getAllMoves(color);
+        if(moves.size()==0)
+            return new AlfaBeta(color ? 9999:-9999,alfa,beta);
         if(depth == 0) {
             if(jeo) return minimaxJede(b,alfa,beta,color, 0, true);
             return new AlfaBeta(b.getRating(), alfa, beta);
@@ -99,7 +103,9 @@ public class Bot extends Player{
             beta = Math.min(beta, res);
         }
         Deque<Move> moves = b.getAllMoves(color);
-        if(moves.isEmpty() || !moves.getFirst().isCaptures() || duz > 5 || Math.abs(b.getRating()) > 1100) {
+        if(moves.size()==0)
+            return new AlfaBeta(color ? 9999:+9999,alfa,beta);
+        if(!moves.getFirst().isCaptures() || duz > 5 || Math.abs(b.getRating()) > 1100) {
 //            System.out.println("OKKKKK");
             return new AlfaBeta(b.getRating(), alfa, beta);
         }
@@ -133,5 +139,7 @@ public class Bot extends Player{
             this.game.makeMove(this, move);
             //this.game.changeTurn();
         }
+        else
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Igrač je pobedio");
     }
 }

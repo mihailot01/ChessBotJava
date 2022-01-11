@@ -8,12 +8,14 @@ import java.util.List;
 
 public abstract class Piece {
 
-    int [][] awardPositions = new int[8][8];
 
     int [][] diagonalDir = {{1,1},{1,-1}, {-1,1}, {-1,-1}};
     int [][] ortogonalDir = {{1,0},{-1,0}, {0,1}, {0,-1}};
     int [][] gDir = {{2,1}, {2,-1}, {-2,1}, {-2,-1}, {1,2}, {1,-2}, {-1,2}, {-1,-2}};
     int [][] nextDir = {{1,0},{1,1},{0,1},{0,-1},{-1,-1},{-1,0},{1,-1},{-1,1}};
+
+    int [][] awardPositions = new int[8][8];
+
     Board board;
     String name;
     boolean color;

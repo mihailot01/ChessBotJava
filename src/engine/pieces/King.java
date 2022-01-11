@@ -23,6 +23,8 @@ public class King extends Piece{
     }
 
     private boolean canCastle(Board b, Piece rook){
+        if(b.isAttackedSquare(this.x,this.y,this.color))
+            return false;
         if(this.moved || rook == null || !(rook instanceof Rook) || rook.moved)
             return false;
         int rookY = rook.getY();
@@ -71,6 +73,6 @@ public class King extends Piece{
         {-30, -30, -40, -55, -55, -40, -30, -30},
         {-20, -20, -30, -35, -35, -30, -20, -20},
         {-10, -10, -25, -35, -35, -25, -10, -10},
-        {-5, 0, -15, -30, -30, -15, 0, -5}};
+        {-5, 0, -2, -30, -30, -15, 0, -5}};
     }
 }
